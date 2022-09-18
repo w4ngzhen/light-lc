@@ -11,14 +11,17 @@ export class RenderEngine {
      * @param rootEleNode
      */
     build(rootEleNode: ElementNode): JSX.Element | undefined {
-        return this.innerBuild(rootEleNode);
+        // 起始节点，需要构造一个起始path传入innerBuild
+        // 注意，根节点由于不属于某一个父级的子元素，所以不存在'@${index}'
+        return this.innerBuild(rootEleNode, '/' + rootEleNode.type);
     }
 
     /**
      * 构建：通过传入ElementNode信息，得到该节点对应供React渲染的ReactNode
      * @param rootEleNode
+     * @param path
      */
-    private innerBuild(rootEleNode: ElementNode): JSX.Element | undefined {
+    private innerBuild(rootEleNode: ElementNode, path: string): JSX.Element | undefined {
         if (!rootEleNode) {
             return undefined;
         }
@@ -31,11 +34,14 @@ export class RenderEngine {
         }
         // 递归调用自身，获取子元素处理后的ReactNode
         const childrenReactNode =
-            (children || []).map((childEleNode) => {
-                return this.innerBuild(childEleNode)
+            (children || []).map((childEleNode, index) => {
+                // 子元素路径：
+                // 父级路径（也就是当前path）+ '/' + 子元素类型 + 子元素所在索引
+                const childPath = `${path}/${childEleNode.type}@${index}`;
+                return this.innerBuild(childEleNode, childPath)
             });
         const reactNode = typeRenderer.render(
-            {elementNode: rootEleNode},
+            {path: path, elementNode: rootEleNode},
             childrenReactNode
         )
         return reactNode;

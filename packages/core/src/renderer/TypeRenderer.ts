@@ -5,6 +5,10 @@ import {ElementNode} from "./ElementNode";
  * 渲染器渲染上下文，至少包含ElementNode的相关数据
  */
 export interface TypeRendererContext {
+    /**
+     * path：让每个TypeRenderer知道当前渲染的元素所在的路径
+     */
+    path: string;
     elementNode: Omit<ElementNode, ''>;
 }
 
