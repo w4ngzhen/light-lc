@@ -5,8 +5,9 @@ import {Input} from "antd";
 export class InputRenderer implements TypeRenderer{
     render(rendererContext: TypeRendererContext,
            childrenReactNode?: ReactNode[]): JSX.Element {
+        const {path} = rendererContext;
         return (
-            <Input />
+            <Input key={path}/>
         )
     }
 }

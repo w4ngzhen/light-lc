@@ -6,10 +6,11 @@ export class ButtonRenderer implements TypeRenderer {
 
     render(rendererContext: TypeRendererContext,
            childrenReactNode?: ReactNode[]): JSX.Element {
-        const {elementNode = {}} = rendererContext;
+        const {path, elementNode = {}} = rendererContext;
         const {text = 'button'} = elementNode;
         return (
             <Button
+                key={path}
                 type='primary'>
                 {text}
             </Button>
